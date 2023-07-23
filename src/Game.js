@@ -7,8 +7,19 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerPosition: { x: 0, y: 0 },
-      mapLayout: [],
+      playerPosition: { x: 2, y: 2 },
+      mapLayout: [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      ],
       // Add other state variables as needed
     };
 
@@ -16,21 +27,25 @@ class Game extends React.Component {
   }
 
   handleMove(direction) {
-    // Update the player's position based on the direction of movement
-    // This is just a placeholder, you'll need to implement the actual movement logic
-    this.setState(state => ({
-      playerPosition: {
-        x: state.playerPosition.x + (direction === 'right' ? 1 : direction === 'left' ? -1 : 0),
-        y: state.playerPosition.y + (direction === 'down' ? 1 : direction === 'up' ? -1 : 0)
-      }
-    }));
+    const dx = direction === 'right' ? 1 : direction === 'left' ? -1 : 0;
+    const dy = direction === 'down' ? 1 : direction === 'up' ? -1 : 0;
+    const x = this.state.playerPosition.x + dx;
+    const y = this.state.playerPosition.y + dy;
+
+    if (
+      y >= 0 && y < this.state.mapLayout.length &&
+      x >= 0 && x < this.state.mapLayout[0].length &&
+      this.state.mapLayout[y][x] === 0
+    ) {
+      this.setState({ playerPosition: { x, y } });
+    }
   }
 
   render() {
     return (
       <div>
         <Player position={this.state.playerPosition} />
-        <Map layout={this.state.mapLayout} />
+        <Map layout={this.state.mapLayout} playerPosition={this.state.playerPosition} />
         <Controls onMove={this.handleMove} />
       </div>
     );
